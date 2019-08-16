@@ -146,6 +146,147 @@ fun main() {
      */
 
 
+    /**
+     * COMMON OPERATIONS ON COLLECTIONS INVOLVING LAMBDAS
+     */
+
+    /**
+     * 1 FILTER OPERATOR : It filters out the elements of the list and keep only that satisfy the given predicate.
+     * In the below example we are filtering out items that are only even numbers
+     * Please check the filter function and how it works internally
+     * filter is an extension function that accepts a lambda as a predicate and then returns a NEW list that satisfy the predicate
+     */
+    println(listOf(1, 2, 3, 4, 5, 6, 7).filter { it % 2 == 0 })  //output [2,4,6]
+
+
+    /**
+     * 2 MAP OPERATOR : this transforms each element in a collection and stores all the result elements in a new list.
+     * In the below example we find the square of each element of the list. the resulting list contains as many elements as the original list
+     * map is an extention function that is defined on the collection class which accepts a transform function which is a lambda
+     */
+    println(listOf(1, 2, 3, 4).map { it * it })// output [1,4,9,16]
+
+    /**
+     * 3 ANY operator : Any operator checks that is ATLEAST one element satisfying the given predicate.
+     * In the below example we check whether there is atleast one even  number in the list
+     * any() function checks if there is atleast one element in the list , where as there is an overlaoded version which takes in a predicate lambda on which you can mention the condition
+     */
+
+    println(listOf(2, 3, 5, 6).any { it % 2 == 0 })// output true
+
+
+    /**
+     * 4 ALL operator : All operator checks if all the elements satisfy the given predicate
+     * In the below example we check whether all the elements are even  number in the list
+     */
+
+    println(listOf(2, 3, 5, 6).all { it % 2 == 0 })// output false
+
+
+    /**
+     * 5 NONE operator : none opertor makes sure that none of the elements satisfy the given predicate. Its the opposite of ALL operator
+     * none() function checks if the list contains no elements
+     */
+    println(listOf(2, 3, 5, 6).none { it % 2 == 0 })// output false
+    println(listOf(7, 3, 5, 1).none { it % 2 == 0 })// output true
+    println(listOf(7, 3, 5, 1).none())// output false
+
+
+    /**
+     * 6 FIND operator : find operator finds the FIRST element that satisfy the predicate and then returns the element as the result.
+     * If there is no required elements then find returns null,
+     * find internally calls another function called firstOrNull, we can use this function as well.
+     */
+
+    println(listOf(7, 3, 5, 1).find { it % 2 == 0 })// output null
+    println(listOf(7, 2, 5, 4).find { it % 2 == 0 })// output 2
+
+    /**
+     * 7 First and firstorNull  : First is similar to find with one differnence  : first takes a predicate and throws an exception if no elements satisfying the predicate is found.
+     * firstOrNull is same as FIND OPERATOR
+     */
+
+    /**
+     * 8 PARTITION : Partition divides the collection into two collections. Filter returns only the elements that satisfy the predicate, and in a sense, throws out all the elements that don't satisfy the predicate.
+     * If you need to keep both groups of elements that satisfy or do not satisfy the predicate, you can use the partition.
+     * It returns two collections, for the good elements and the remaining ones. It returns a Pair<List,List>
+     */
+
+    println(listOf(1, 2, 3, 4, 5, 6, 7).partition { it % 2 == 0 })  //output ([2, 4, 6], [1, 3, 5, 7])
+
+
+    /**
+     * 9 GROUP BY : If you need to divide the collection into more than two parts then use groupby operator.
+     * As an argument, you provide the way how to group the elements.The result is, map from the given key to a list of elements that satisfy this scheme
+     * In the below example we have grouped all elements by their last letter. Output is a map that gives different list
+     */
+
+
+    println(listOf("one", "two", "three").groupBy { it.lastChar() }) //output {e=[one, three], o=[two]}
+
+
+    /**
+     * 10 associateBy Returns a [Map] containing the elements from the given collection indexed by the key
+     * returned from [keySelector] function applied to each element.
+     *
+     * If any two elements would have the same key returned by [keySelector] the last one gets added to the map.
+     *
+     * The returned map preserves the entry iteration order of the original collection.
+     */
+
+
+    println(listOf("one", "two", "three").associateBy { it.lastChar() }) //output {e=three, o=two}
+
+
+    /**
+     * 11 associate : You can use as associate to build a map based on a list.
+     * As an argument, you pass allowed to creating the key value pair based on each list element, then associate builds a map by filling in specified keys and values.
+     * The first value in a pair becomes key in the map, the second becomes the value.
+     * Here, a plus it specifies how to create keys, while 10 multiply, it is the way to create values
+     */
+    println(listOf(1, 2, 3, 4, 5, 6, 7).associate { 'a' + it to 10 * it })  //output {b=10, c=20, d=30, e=40, f=50, g=60, h=70}
+
+
+    /**
+     * 12 zip : Zip provides you with a way to organize a couple of lists.
+     * It zips like a zipper the elements from two lists.
+     * It returns you a list of pairs where each pair contains one element from the first list and another element from the second list.
+     * If their initial list have different sizes, then the resulting list of pairs will have the length of the shortest list, the remaining elements from the longest list will be ignored
+     */
+
+    println(listOf(1, 2, 3, 4, 5, 6, 7).zip(listOf("a","b","c","d"))) //output : [(1, a), (2, b), (3, c), (4, d)]
+
+
+    /**
+     * 13 zipNext : The frequent use case is to zip neighboring elements in the list.
+     * That can be done with the help of the zipWithNext function. It returns you a list of pairs where each pair consists of neighboring elements is from the initial list.
+     * Note that, each element except the first and the last one will belong two pairs.
+     * Like three in this example list is the second element in the second pair and the first element in the third pair.
+     * Both zip and zipWithNext have overloaded versions taking a lambda as an argument that specifies how each pair of elements must be transformed
+     */
+
+    println(listOf(1, 2, 3, 4, 5, 6, 7).zipWithNext())  //output [(1, 2), (2, 3), (3, 4), (4, 5), (5, 6), (6, 7)]
+
+
+    /**
+     * 14 flatten : Flatten is an extension function that must be called on a list of lists.
+     * It combines all the elements from the nested list and returns you a list of these elements as the result.
+     * We can say, it flattens the list of lists contents
+     */
+
+    println(listOf(listOf(1,2,3,4),listOf("a","b","x","z")).flatten()) //output : [1, 2, 3, 4, a, b, x, z]
+
+
+    /**
+     * 15 flatMap : It combines two operations, map and flat. The argument to flatMap must be a lambda that converts each initial element to a list.
+     * Here, we first map each string into a list of characters. In the middle layer after applying the first map operations, we have at list of lists.
+     * Often, you'd prefer list of elements as a result instead and flatten does that. Here, flatMap returns a list of characters obtained from initial strings.
+     */
+
+    println(listOf("abc","efg","hij").flatMap { it.toList() }) //output : [a, b, c, e, f, g, h, i, j]
+
+
+
 }
 
 fun calculateSumOfNumbers(i: Int, i1: Int, lambdaExpression: (Int, Int) -> Unit) = lambdaExpression(i, i1)
